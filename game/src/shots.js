@@ -1,0 +1,4 @@
+import {createWorld} from './world.js';
+import {createFlight} from './flight.js';
+import {UNITS} from './config.js';
+export function createShot(params){const name=params.get('shot');if(!['start','play','end'].includes(name))return null;const seed=Number(params.get('seed')??1);const world=createWorld(Number.isFinite(seed)?seed:1);const state={...createFlight(world),mode:'title',ringIndex:0,score:0,landingBonus:0,fuelBonus:0,notice:'',noticeTime:0};if(name==='play'){const r=world.rings[2];Object.assign(state,{mode:'flying',x:r.x-65,y:1240/UNITS.feet,z:r.z-720,heading:.05,pitch:-.08,roll:.15,airspeed:118/UNITS.knots,verticalSpeed:-1.8,throttle:.78,fuel:83,grounded:false,airborne:true,ringIndex:2,score:200});}if(name==='end')Object.assign(state,{mode:'landed',z:280,airspeed:0,throttle:0,fuel:68,ringIndex:8,landingBonus:500,fuelBonus:136,score:1436,airborne:true});return {world,state,time:12};}
